@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+<!-- Title -->
+{% block title %} Hotel Booking {% endblock %}
+
+<!-- Navbar -->
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url_for('promo.promos')}}">CRM-FCTH</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('promo.promos')}}">Packages
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('promo.flights')}}">Flights Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('promo.bookings')}}">Hotel Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="{{ url_for('promo.chat') }}">Chat</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            {% if call_or_get(current_user.is_authenticated) %} 
+            <li class="nav-item">
+                <a href="{{ url_for('main.homepage') }}" class="nav-link">Employee's Overview</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a href="{{ url_for('main.homepage') }}" class="nav-link">Employee Login</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+{% endblock%}
+
+<!-- Jumbotron Block -->
+{% block jumbtron %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Hotel Booking Request</h1>
+        <p class="lead">Please enter the require fields for your Hotel Booking Request</p>
+        <p class="lead">An email will be replied to you within 1 working day</p>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+<div class="container">
+    {% from "_formhelper.html" import render_field %}
+    <form action="{{url_for('promo.bookings')}}" method="post">
+        {{form.csrf_token}}
+        <div class="row">
+            <div class="col">
+                <!-- email -->
+                {{ render_field(form.email, class="form-control", placeholder="email@example.com") }}
+                <!-- place_to -->
+                {{ render_field(form.hotel_location, class="form-control", placeholder="ex. Manila") }}
+                <!-- place_from -->
+                {{ render_field(form.check_in_date, class="form-control", placeholder="") }}
+            </div>
+            <div class="col">
+                <!-- departure_date -->
+                {{ render_field(form.check_out_date, class="form-control", placeholder="") }}
+                <!-- arrival_date -->
+                {{ render_field(form.number_of_rooms, class="form-control", placeholder="ex. 2") }}
+                <!-- budget_range -->
+                {{ render_field(form.budget_range, class="form-control", placeholder="ex. 500.00") }}
+            </div>
+        </div>
+        {{ form.recaptcha() }}
+        {{ form.submit(class_='btn btn-block btn-primary')}}
+    </form>
+</div>
+{% endblock %}
+
+<!-- Footer -->
+{% block footer %}
+<div class="container-fluid bg-light mt-3 py-3">
+    <span class="text-muted">This is created for ISPROJ2</span>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'layout.html' %} 
+
+{% block title %}Flight Confirmation{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url_for('promo.promos')}}">CRM-FCTH</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('promo.promos')}}">Packages
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('promo.flights')}}">Flights Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('promo.bookings')}}">Hotel Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="{{ url_for('promo.chat') }}">Chat</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            {% if call_or_get(current_user.is_authenticated) %} 
+            <li class="nav-item">
+                <a href="{{ url_for('main.homepage') }}" class="nav-link">Employee's Overview</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a href="{{ url_for('main.homepage') }}" class="nav-link">Employee Login</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+<!-- Jumbotron Block -->
+{% block jumbtron %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container text-center">
+        <h1 class="display-4">Thank you for your reservation!</h1>
+        <p class="lead">An email will be replied to you within 1 working day for confirmation of your request</p>
+        <p>
+            <a href="{{url_for('promo.promos')}}" class="btn btn-primary">Return to Packages</a>
+        </p>
+        <p>
+            <a href="{{url_for('promo.flights')}}" class="btn btn-primary">Request Flight Reservation</a>
+        </p>
+    </div>
+</div>
+{% endblock %} 
+{% block footer %}
+<div class="container-fluid bg-light mt-3 py-3">
+    <span class="text-muted">This is created for ISPROJ2</span>
+</div>
+{% endblock %}

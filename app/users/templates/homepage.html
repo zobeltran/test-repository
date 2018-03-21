@@ -1,0 +1,140 @@
+{% extends 'layout.html' %}
+
+<!-- Title -->
+{% block title %} Homepage {% endblock %}
+
+<!-- Navbar -->
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url_for('main.homepage')}}">CRM-FCTH</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('main.homepage')}}">
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+           <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.promo')}}">Promo Create</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="{{ url_for('main.chat') }}">Chat Room</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            {% if call_or_get(current_user.is_authenticated) %}
+            <li class="nav-item">
+                <a href="{{ url_for('promo.promos') }}" class="nav-link">Promo Pages</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('user.profile') }}" class="nav-link">{{ current_user.username }}</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('user.logout') }}" class="nav-link">Sign out</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a href="{{ url_for('user.login') }}" class="nav-link">Sign in</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+<div class="container">
+
+    <h1>Flights</h1>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Departure Location</th>
+                <th>Arrival Location</th>
+                <th>Departure Date</th>
+                <th>Arrival Date</th>
+                <th>Budget Range</th>
+                <th>Head Count</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in flights %}
+            <tr>
+                <td>{{ item.fbooking_email }}</td>
+                <td>{{item.fbooking_departure}}</td>
+                <td>{{item.fbooking_arrival}}</td>
+                <td>{{item.fbooking_departure_date.strftime('%b %d, %Y')}}</td>
+                <td>{{item.fbooking_arrival_date.strftime('%b %d, %Y')}}</td>
+                <td>{{item.fbooking_budget_range}}</td>
+                <td>{{item.fbooking_head_count}}</td>
+                <td><a href="{{url_for('main.fdelete', fbooking_id=item.fbooking_id)}}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <h1>Hotels</h1>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Booking Location</th>
+                <th>Check In Date</th>
+                <th>Check Out Date</th>
+                <th>Number of Rooms</th>
+                <th>Budget Range</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in hotels %}
+            <tr>
+                <td>{{item.hbooking_email}}</td>
+                <td>{{item.hbooking_location}}</td>
+                <td>{{item.hbooking_check_in.strftime('%b %d, %Y')}}</td>
+                <td>{{item.hbooking_check_out.strftime('%b %d, %Y')}}</td>
+                <td>{{item.hbooking_number_of_rooms}}</td>
+                <td>{{item.hbooking_budget_range}}</td>
+                <td>
+                    <a href="{{url_for('main.hdelete', hbooking_id=item.hbooking_id)}}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+        <h1>Packages</h1>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Package Name</th>
+                    <th>Package Description</th>
+                    <th>Price</th>
+                    <th>Creation Date</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in packages %}
+                <tr>
+                    <td>{{ item.package_name }}</td>
+                    <td>{{item.package_description}}</td>
+                    <td>{{item.package_price}}</td>
+                    <td>{{item.package_createtime.strftime('%b %d, %Y')}}</td>
+                    <td>
+                        <a href="{{url_for('main.pdelete', package_id=item.package_id)}}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+{% endblock %}

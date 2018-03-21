@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+
+<!-- Title -->
+{% block title %} Packages {% endblock %}
+
+<!-- Navbar Block -->
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">CRM-FCTH</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('promo.promos')}}">Packages
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('promo.flights')}}">Flights Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('promo.bookings')}}">Hotel Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="{{ url_for('promo.chat') }}">Chat</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            {% if call_or_get(current_user.is_authenticated) %} 
+            <li class="nav-item">
+                <a href="{{ url_for('main.homepage') }}" class="nav-link">Employee's Overview</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a href="{{ url_for('main.homepage') }}" class="nav-link">Employee Login</a>
+            </li>
+            {% endif %}
+        </ul>
+</nav>
+
+{% endblock %}
+
+<!-- Jumbotron Block -->
+{% block jumbtron %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Packages</h1>
+        <p class="lead">Choose your packages</p>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Content Block -->
+{% block content %}
+<div class="container">
+    {% for item in packages|batch(3) %}
+    <div class="card-deck">
+        {% for package in item %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title" href="">{{ package.package_name }}</h4>
+                <p class="card-text">{{ package.package_description }}</p>
+                <p class="card-text">{{ package.package_price }}</p>
+                <a href="{{ url_for('promo.package', package_id=package.package_id)}}" class="btn btn-primary">Click here to view</a>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Last Updated at {{ package.package_updated.strftime('%B %d, %Y') }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br> {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+<!-- {% for package in packages %}
+<h1>This is for promo: {{ package.package_id }}</h1>
+<h2>{{ package.package_description }}</h2>
+{% endfor %} -->
+{% extends 'layout.html' %}
+
+{% block title %} Package {% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url_for('promo.promos')}}">CRM-FCTH</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('promo.promos')}}">Packages
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('promo.flights')}}">Flights Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('promo.bookings')}}">Hotel Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="{{ url_for('promo.chat') }}">Chat</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            {% if call_or_get(current_user.is_authenticated) %} 
+            <li class="nav-item">
+                <a href="{{ url_for('main.homepage') }}" class="nav-link">Employee's Overview</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a href="{{ url_for('main.homepage') }}" class="nav-link">Employee Login</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block jumbtron %}
+    <div class="jumbotron jumbotron-fluid">
+        {% for package in packages %}
+        <div class="text-center">
+            <h1 class="display-3">{{ package.package_name }}</h1>
+            <p class="lead">{{ package.package_description }}</p>
+            <p class="lead">PHP {{ package.package_price }}</p>
+            <form action="{{ url_for('promo.pay', package_id=package.package_id) }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="{{ pubkey }}"
+                
+                data-name="{{ package.package_name }}"
+                data-description="PHP {{ package.package_price }}"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto">
+            </script>
+            </form>
+        </div>
+        {% endfor %}
+    </div>  
+{% endblock %}
